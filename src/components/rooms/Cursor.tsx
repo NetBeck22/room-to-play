@@ -29,7 +29,7 @@ export function Cursor() {
       target.x = e.clientX;
       target.y = e.clientY;
       const el = (e.target as HTMLElement | null)?.closest?.("[data-cursor]") as HTMLElement | null;
-      const key = el?.dataset.cursor ?? "";
+      const key = el?.dataset["cursor"] ?? "";
       setLabel(LABELS[key] ?? null);
     };
 
