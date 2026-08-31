@@ -8,6 +8,7 @@ import { Room } from "../components/rooms/Room";
 import { ArtworkDetail } from "../components/rooms/ArtworkDetail";
 import { Chapter, Panel } from "../components/rooms/Chapter";
 import { Draggable } from "../components/rooms/Draggable";
+import { Journey, Passage, type Stop } from "../components/rooms/Journey";
 import {
   Arrow,
   FloorPlan,
@@ -40,6 +41,15 @@ export const Route = createFileRoute("/")({
   component: RoomsExperience,
 });
 
+const STOPS: Stop[] = [
+  { id: "stop-01", n: "01", label: "ROOM 01" },
+  { id: "stop-02", n: "02", label: "THE HALL" },
+  { id: "stop-03", n: "03", label: "ROOM 02" },
+  { id: "stop-04", n: "04", label: "THE STUDIO" },
+  { id: "stop-05", n: "05", label: "THE ARCHIVE" },
+  { id: "stop-06", n: "06", label: "THE PLAN" },
+];
+
 function RoomsExperience() {
   const [entered, setEntered] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
@@ -69,9 +79,10 @@ function RoomsExperience() {
       <RoughDefs />
       <Cursor />
       {!entered && <Opening onEnter={() => setEntered(true)} />}
+      <Journey stops={STOPS} visible={entered} />
 
       {/* ——— ROOM 01 ——— */}
-      <section className={`h-[100svh] w-full ${entered ? "room-enter" : "opacity-0"}`}>
+      <section id="stop-01" className={`h-[100svh] w-full ${entered ? "room-enter" : "opacity-0"}`}>
         <Room
           number="ROOM 01"
           title="THE FIRST WALL"
@@ -81,9 +92,11 @@ function RoomsExperience() {
         />
       </section>
 
+      <Passage from="ROOM 01" to="THE HALL" note="you walk out of the first room, into the corridor" />
+
       {/* ——— A BREATH OF TYPOGRAPHY ——— */}
-      <section className="relative flex min-h-[85svh] w-full flex-col justify-center overflow-hidden px-6 py-24 md:px-14">
-        <div className="font-mono text-[10px] tracking-[0.28em] text-clay-dark">CHAPTER I — ii</div>
+      <section id="stop-02" className="relative flex min-h-[85svh] w-full flex-col justify-center overflow-hidden px-6 py-24 md:px-14">
+        <div className="font-mono text-[10px] tracking-[0.28em] text-clay-dark">STOP 02 — THE HALL</div>
         <h2 className="mt-8 font-display text-[15vw] leading-[0.78] tracking-[-0.05em] text-ink">
           <span className="block">EVERY</span>
           <span className="block pl-[8vw] md:pl-[22vw]">WORK</span>
@@ -106,10 +119,16 @@ function RoomsExperience() {
         <Mouse aria-hidden className="absolute bottom-8 right-[8%] h-4 w-auto text-clay-dark" />
       </section>
 
+      <Passage
+        from="THE HALL"
+        to="ROOM 02"
+        note="at the end of the corridor the floor turns. from here you travel sideways"
+      />
+
       {/* ——— CHAPTER II — HORIZONTAL ——— */}
-      <div className="relative">
+      <div id="stop-03" className="relative">
         <div className="absolute left-6 top-6 z-20 font-mono text-[10px] tracking-[0.28em] text-clay-dark md:left-12">
-          CHAPTER II — SIDEWAYS
+          STOPS 03 – 05 — SIDEWAYS: ROOM 02 · STUDIO · ARCHIVE
         </div>
         <Chapter>
           <Panel>
@@ -125,7 +144,7 @@ function RoomsExperience() {
 
           {/* ARTIST — a studio wall */}
           <Panel width="115vw" className="bg-paper">
-            <div ref={artistRef} className="relative h-full w-full overflow-hidden px-6 py-20 md:px-14">
+            <div id="stop-04" ref={artistRef} className="relative h-full w-full overflow-hidden px-6 py-20 md:px-14">
               <div className="font-mono text-[10px] leading-[1.9] tracking-[0.24em] text-clay-dark">
                 ARTIST 01 / REPRESENTED BY ROOMS.
               </div>
@@ -176,7 +195,7 @@ function RoomsExperience() {
 
           {/* COLLECTION — a leaning archive */}
           <Panel width="120vw">
-            <div className="relative h-full w-full overflow-hidden px-6 py-20 md:px-14">
+            <div id="stop-05" className="relative h-full w-full overflow-hidden px-6 py-20 md:px-14">
               <h3 className="font-display text-[11vw] leading-[0.8] tracking-[-0.05em]">
                 THE COLLECTION
               </h3>
@@ -236,9 +255,15 @@ function RoomsExperience() {
       </div>
 
       {/* ——— THE MAP ——— */}
-      <section ref={mapRef} className="relative w-full px-6 py-28 md:px-14">
+      <Passage
+        from="THE ARCHIVE"
+        to="THE PLAN"
+        note="the last door opens onto the drawing of the whole house"
+      />
+
+      <section id="stop-06" ref={mapRef} className="relative w-full px-6 py-28 md:px-14">
         <div className="font-mono text-[10px] tracking-[0.28em] text-clay-dark">
-          CHAPTER III — THE PLAN
+          STOP 06 — THE PLAN / END OF THE WALK
         </div>
         <div className="mt-10 grid items-center gap-14 md:grid-cols-[1.1fr_.9fr]">
           <FloorPlan
@@ -266,7 +291,7 @@ function RoomsExperience() {
                 HELLO@ROOMS.GALLERY
               </a>
             </div>
-            <span className="mt-10 block font-hand text-[19px]">you missed something. go back.</span>
+            <span className="mt-10 block font-hand text-[19px]">that was the whole walk. the door is still open →</span>
           </div>
         </div>
       </section>
